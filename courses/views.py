@@ -82,6 +82,38 @@ def getOrderById(request,id):
 
 
 
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getMyCourses(request): 
+    user = request.user
+    try:
+        courses= OwnedCourse.objects.filter(user=user).order_by("-createdAt")
+        serializer = OwnedCourseWithoutFileSerializer(courses, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"details":f"{e}"}, status= status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def getCourseDetails(request,id):
+    user = request.user
+    try:
+        course = Course.objects.get(id=id)
+        if user.is_authenticated:
+            
+            try:
+                ownedCourse = OwnedCourse.objects.get(course=course,user=user)
+                serializer = OwnedCourseWithFileSerializer(ownedCourse, many=False)    
+            except:
+                serializer = CourseSerializerWithoutFile(course, many=False)   
+        else:
+            serializer = CourseSerializerWithoutFile(course, many=False)    
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"details": f"{e}"}, status=status.HTTP_404_NOT_FOUND)
+    
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request, id):
