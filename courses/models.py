@@ -1,3 +1,4 @@
+from hashlib import blake2b
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
@@ -5,6 +6,7 @@ import uuid
 
 class Course(models.Model):
     title = models.CharField(max_length=255,null=True,blank=False)
+    thumbnail = models.ImageField(upload_to="images/",null=True,blank=True)
     file = models.FileField(null=True,blank=True)
     description = models.TextField(null=True,blank=True)
     price = models.IntegerField(null=True,blank=False)

@@ -5,7 +5,7 @@ from .models import Course,OrderCourses,OwnedCourse
 class CourseSerializerWithoutFile(serializers.ModelSerializer):
     class Meta:
         model= Course
-        fields = ["title", "description", "price", "createdAt", "id", "students", "available"]
+        fields = ["title", "description", "price", "createdAt", "id", "students", "available", "thumbnail"]
 
 
 class CourseSerializerWithFile(serializers.ModelSerializer):
