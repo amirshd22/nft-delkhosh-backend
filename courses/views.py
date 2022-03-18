@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import OrderCourses,OwnedCourse,Course
+from .models import CourseReview, OrderCourses,OwnedCourse,Course
 from .serializers import OrderCourseSerializer,OwnedCourseWithFileSerializer,OwnedCourseWithoutFileSerializer,CourseSerializerWithFile,CourseSerializerWithoutFile
 
 
@@ -148,4 +148,35 @@ def updateOrderToPaid(request, id):
             return Response({"details": f"تراکنش با موفقیت انجام نشد {response.text}"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"details": f"{e}"})
+
+
+
+
+# Course Review
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def createCourseReview(request,id):
+    course = Course.objects.get(id=id)
+    user = request.user
+    data = request.data
+
+    alreadyExists = course.courseReview_set.filter(user=user).exists()
+    if alreadyExists:
+        content = {
+            "details": "شما یکبار نظر داده اید"
+        }
+        return Response(content , status=status.HTTP_400_BAD_REQUEST)
     
+    # elif data["rate"] == 0:
+    #     content = {
+    #         "details": "لطفا امتیازی رو انتخاب کنید"
+    #     }
+    #     return Response(content , status=status.HTTP_400_BAD_REQUEST)
+    else:
+        review= CourseReview.objects.create(
+            user=user,
+            course=course,
+            content = data['content']
+        )
+        return Response({"details": "نظر شما با موقعیت اضافه شد"})

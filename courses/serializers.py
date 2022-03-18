@@ -1,11 +1,17 @@
 from rest_framework import serializers 
-from .models import Course,OrderCourses,OwnedCourse
+from .models import Course,OrderCourses,OwnedCourse,CourseReview
 
 
 class CourseSerializerWithoutFile(serializers.ModelSerializer):
     class Meta:
         model= Course
         fields = ["title", "description", "price", "createdAt", "id", "students", "available", "thumbnail"]
+
+
+class CourseReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= CourseReview
+        fields= "__all__"
 
 
 class CourseSerializerWithFile(serializers.ModelSerializer):
