@@ -27,6 +27,7 @@ class OrderAdvertising(models.Model):
     createdAt= models.DateTimeField(auto_now_add=True,null=True)
     isLive= models.BooleanField(default=False,null=True,blank=False)
     id= models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
+    url = models.CharField(max_length=355, null=True,blank=True)
 
     def __str__(self):
-        return f"{self.user.username}-{self.isPaid}"
+        return f"{self.user.username}-{self.transId}-{self.isPaid}"

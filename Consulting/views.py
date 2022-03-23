@@ -25,20 +25,23 @@ def createOrder(request):
 
     try:
         plan= ConsultingPlan.objects.get(id=data["planId"])
+        
         try:
+            tax = plan.price * 0.09
             orderCred = {
-                    'pin' : '63A01E4D9C3A023E66A0', #TODO change this 
-                    'amount' : int(plan.price),
-                    'callback' : 'https://cocobeauty.ir/verify/',#TODO change this   
+                    'pin' : 'aqayepardakht', #TODO change this 
+                    'amount' : int(plan.price + tax),
+                    'callback' : 'https://localhost/consulting/order/verify/',#TODO change this   
                 }
             response = requests.post("https://panel.aqayepardakht.ir/api/create", data=orderCred)
             if response.status_code == 200 and not response.text.replace('-',"").isdigit():
-            
+                url ='https://panel.aqayepardakht.ir/startpay/'+response.text
+                
                 order= OrderConsulting.objects.create(
                     user=user,
                     plan=plan,
-                    description=data["description"],
-                    transId=response.text
+                    transId=response.text,
+                    url=url
                 )
                 serializer= OrderConsultingSerializer(order, many=False)
                 return Response(serializer.data)
@@ -67,7 +70,7 @@ def getMyOrders(request):
 def getOrderById(request,id):
     user= request.user
     try:
-        order= OrderConsulting.objects.get(id=id)
+        order= OrderConsulting.objects.get(transId=id)
 
         if user.is_staff or order.user == user:
             serializer = OrderConsultingSerializer(order,many=False)

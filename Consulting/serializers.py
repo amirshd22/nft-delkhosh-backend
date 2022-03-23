@@ -15,6 +15,6 @@ class OrderConsultingSerializer(serializers.ModelSerializer):
         fields= "__all__"
     
     def get_plan(self,obj):
-        plan = obj.consultingplan
+        plan = obj.plan
         serializer = ConsultingPlanSerializer(plan,many=False)
         return serializer.data

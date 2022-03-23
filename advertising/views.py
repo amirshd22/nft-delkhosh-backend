@@ -32,6 +32,7 @@ def createOrder(request):
                 }
             response = requests.post("https://panel.aqayepardakht.ir/api/create", data=orderCred)
             if response.status_code == 200 and not response.text.replace('-',"").isdigit():
+                url ='https://panel.aqayepardakht.ir/startpay/'+response.text
             
                 order= OrderAdvertising.objects.create(
                     user=user,
@@ -39,7 +40,8 @@ def createOrder(request):
                     description=data["description"],
                     link=data["link"],
                     image=request.FILES["image"],
-                    transId=response.text
+                    transId=response.text,
+                    url=url
                 )
                 serializer= OrderAdvertisingSerializer(order, many=False)
                 return Response(serializer.data)

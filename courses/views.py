@@ -23,12 +23,15 @@ def getCourses(request):
 def createOrder(request):
     user= request.user
     data= request.data
+    
     try:
         course= Course.objects.get(id=data["courseId"])
+        
         try:
+            tax = course.price * 0.09
             orderCred = {
-                    'pin' : '63A01E4D9C3A023E66A0', #TODO change this 
-                    'amount' : int(course.price),
+                    'pin' : 'aqayepardakht', #TODO change this 
+                    'amount' : int(course.price + tax),
                     'callback' : 'https://cocobeauty.ir/verify/',#TODO change this   
                 }
             response = requests.post("https://panel.aqayepardakht.ir/api/create", data=orderCred)
@@ -67,7 +70,7 @@ def getMyOrders(request):
 def getOrderById(request,id):
     user= request.user
     try:
-        order= OrderCourses.objects.get(id=id)
+        order= OrderCourses.objects.get(transId=id)
 
         if user.is_staff or order.user == user:
             serializer = OrderCourseSerializer(order,many=False)

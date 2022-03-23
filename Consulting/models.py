@@ -24,10 +24,11 @@ class OrderConsulting(models.Model):
     paidAt= models.DateTimeField(null=True, blank=True)
     description= models.TextField(null=True,blank=True)
     transId= models.CharField(max_length=255, null=True,blank=True)
+    url = models.CharField(max_length=355, null=True,blank=True)
     createdAt= models.DateTimeField(auto_now_add=True,null=True)
-    consulting_time = models.CharField(max_length=255, null=True,blank=True)
+    consulting_time = models.CharField(max_length=255, null=True,blank=True,default="در حال برسی")
     id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
 
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}-{self.transId}-{self.isPaid}"
