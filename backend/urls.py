@@ -10,5 +10,6 @@ urlpatterns = [
     path("api/advertising/", include("advertising.urls")),
     path("api/consulting/", include("Consulting.urls")),
     path("api/courses/", include("courses.urls")),
+    path("api/nft/",include("nft.urls"))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "advertising.apps.AdvertisingConfig",
     "Consulting.apps.ConsultingConfig",
     "courses.apps.CoursesConfig",
+    "nft.apps.NftConfig",
     #3rd party 
     "rest_framework",
     "corsheaders",
