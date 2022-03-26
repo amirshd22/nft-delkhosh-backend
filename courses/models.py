@@ -35,6 +35,7 @@ class OrderCourses(models.Model):
     paidAt= models.DateTimeField(null=True, blank=True)
     transId= models.CharField(max_length=255, null=True,blank=True)
     createdAt= models.DateTimeField(auto_now_add=True,null=True)
+    url = models.CharField(max_length=255,null=True,blank=True)
     id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
 
     def __str__(self):

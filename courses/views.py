@@ -36,11 +36,13 @@ def createOrder(request):
                 }
             response = requests.post("https://panel.aqayepardakht.ir/api/create", data=orderCred)
             if response.status_code == 200 and not response.text.replace('-',"").isdigit():
-            
+                url ='https://panel.aqayepardakht.ir/startpay/'+response.text
+                
                 order= OrderCourses.objects.create(
                     user=user,
                     course=course,
-                    transId=response.text
+                    transId=response.text,
+                    url=url
                 )
                 serializer= OrderCourseSerializer(order, many=False)
                 return Response(serializer.data)
